@@ -1,5 +1,6 @@
-package wiki;
+package bm;
 
+import java.awt.Color;
 import robocode.*;
 import robocode.util.Utils;
 import java.awt.geom.*;     // for Point2D's
@@ -9,7 +10,7 @@ import java.util.PriorityQueue;
 
 import kd_tree.*;
 
-public class BasicSurfer extends AdvancedRobot {
+public class Banana extends AdvancedRobot {
 
     public static int BINS = 47;
     public static double _surfStats[] = new double[BINS]; // we'll use 47 bins
@@ -46,7 +47,7 @@ public class BasicSurfer extends AdvancedRobot {
         _enemyWaves = new ArrayList<EnemyWave>();
         _surfDirections = new ArrayList<Integer>();
         _surfAbsBearings = new ArrayList<Double>();
-
+        setColors(Color.blue, Color.green, Color.white, Color.white);
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
 
@@ -64,9 +65,8 @@ public class BasicSurfer extends AdvancedRobot {
 
         setTurnRadarRightRadians(Utils.normalRelativeAngle(absBearing - getRadarHeadingRadians()) * 2);
 
-        _surfDirections.add(0,
-                new Integer((lateralVelocity >= 0) ? 1 : -1));
-        _surfAbsBearings.add(0, new Double(absBearing + Math.PI));
+        _surfDirections.add(0, (lateralVelocity >= 0) ? 1 : -1);
+        _surfAbsBearings.add(0, absBearing + Math.PI);
 
         double bulletPower = _oppEnergy - e.getEnergy();
         if (bulletPower < 3.01 && bulletPower > 0.09

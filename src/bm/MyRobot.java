@@ -1,5 +1,5 @@
 
-package wiki;
+package bm;
 
 import robocode.AdvancedRobot;
 
