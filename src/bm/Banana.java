@@ -4,7 +4,6 @@ import java.awt.Color;
 import robocode.*;
 import robocode.util.Utils;
 import java.awt.geom.*;     // for Point2D's
-import java.lang.*;         // for Double and Integer objects
 import java.util.ArrayList; // for collection of waves
 import java.util.PriorityQueue;
 
@@ -43,17 +42,26 @@ public class Banana extends AdvancedRobot {
             = new java.awt.geom.Rectangle2D.Double(18, 18, 764, 564);
     public static double WALL_STICK = 160;
 
+   
     public void run() {
+     double midHeight = getHeight()/2;
+     double midWidth = getWidth()/2;
+        System.out.println("About to move");
+                goTo(midHeight, midWidth);
+            System.out.println("Moved");
         _enemyWaves = new ArrayList<EnemyWave>();
         _surfDirections = new ArrayList<Integer>();
         _surfAbsBearings = new ArrayList<Double>();
-        setColors(Color.blue, Color.green, Color.white, Color.white);
+        //setColors(Color.blue, Color.green, Color.white, Color.white);
+        
         setAdjustGunForRobotTurn(true);
         setAdjustRadarForGunTurn(true);
 
         do {
             // basic mini-radar code
+            
             turnRadarRightRadians(Double.POSITIVE_INFINITY);
+          
         } while (true);
     }
 
@@ -128,7 +136,7 @@ public class Banana extends AdvancedRobot {
                 closestDistance = distance;
             }
         }
-
+        
         return surfWave;
     }
 
@@ -307,6 +315,8 @@ public class Banana extends AdvancedRobot {
         setBackAsFront(this, goAngle);
     }
 
+   
+
     // This can be defined as an inner class if you want.
     class EnemyWave {
 
@@ -400,4 +410,27 @@ public class Banana extends AdvancedRobot {
         my_gun.onPaint(g);
     }
 
+    private void goTo(double x, double y) {
+
+	x -= getX();
+	y -= getY();
+	
+	double angleToTarget = Math.atan2(x, y);
+	
+	double targetAngle = Utils.normalRelativeAngle(angleToTarget - getHeadingRadians());
+	
+	double distance = Math.hypot(x, y);
+	
+	double turnAngle = Math.atan(Math.tan(targetAngle));
+	setTurnRightRadians(turnAngle);
+	if(targetAngle == turnAngle) {
+		setAhead(distance);
+                System.out.println("distance = "+distance);
+	} else {
+		setBack(distance);
+                System.out.println("-distance = "+distance);
+
+	}
+}
+    
 }
