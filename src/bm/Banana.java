@@ -6,12 +6,13 @@ import robocode.util.Utils;
 import java.awt.geom.*;     // for Point2D's
 import java.util.ArrayList; // for collection of waves
 import java.util.PriorityQueue;
+import java.util.Random;
 
 import kd_tree.*;
 
 public class Banana extends AdvancedRobot {
-
-    public static int BINS = 47;
+    
+    public static int BINS = 57;
     public static double _surfStats[] = new double[BINS]; // we'll use 47 bins
 
     public static final int NUM_DIMENSIONS_FOR_KDTREE = 3;
@@ -46,8 +47,9 @@ public class Banana extends AdvancedRobot {
     public void run() {
      double midHeight = getHeight()/2;
      double midWidth = getWidth()/2;
+     System.out.println(getHeight()+", "+getWidth());
         System.out.println("About to move");
-                goTo(midHeight, midWidth);
+                goTo(midHeight*2, midWidth*2);
             System.out.println("Moved");
         _enemyWaves = new ArrayList<EnemyWave>();
         _surfDirections = new ArrayList<Integer>();
@@ -301,17 +303,27 @@ public class Banana extends AdvancedRobot {
         if (surfWave == null) {
             return;
         }
-
+        Random r = new Random();
+        if(r.nextDouble()<0.2){
+            setMaxVelocity(0);
+        }else{
+            setMaxVelocity(8);
+        }
+        if(r.nextDouble()>0.8){
+            setMaxVelocity(3);
+        }else{
+            setMaxVelocity(8);
+        }
         double dangerLeft = checkDanger(surfWave, -1);
         double dangerRight = checkDanger(surfWave, 1);
 
         double goAngle = absoluteBearing(surfWave.fireLocation, _myLocation);
         if (dangerLeft < dangerRight) {
-            goAngle = wallSmoothing(_myLocation, goAngle - (Math.PI / 2), -1);
+            goAngle = wallSmoothing(_myLocation, goAngle - (Math.PI / 2), -1);             
         } else {
             goAngle = wallSmoothing(_myLocation, goAngle + (Math.PI / 2), 1);
         }
-
+        
         setBackAsFront(this, goAngle);
     }
 
@@ -411,7 +423,7 @@ public class Banana extends AdvancedRobot {
     }
 
     private void goTo(double x, double y) {
-
+        System.out.println(x+", "+y);
 	x -= getX();
 	y -= getY();
 	
